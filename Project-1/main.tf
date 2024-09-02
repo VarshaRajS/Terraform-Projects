@@ -27,7 +27,7 @@ resource "aws_vpc" "myvpc" {
 resource "aws_subnet" "mysubnet" {
   vpc_id                  = aws_vpc.myvpc.id
   cidr_block              = "10.0.0.0/24"
-  availability_zone       = "us-east-1"
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true 
 }
 
@@ -39,7 +39,7 @@ resource "aws_internet_gateway" "igw" {
 # creating a route table
 resource "aws_route_table" "rt" {
   vpc_id                  = aws_vpc.myvpc.id
-  route = {
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
@@ -62,7 +62,7 @@ resource "aws_security_group" "sg" {
   from_port = 80
   to_port = 80
   protocol = "tcp"
-  cidr_blocks = "[0.0.0.0/0]"
+  cidr_blocks = ["0.0.0.0/0"]
   }
     
   ingress {
@@ -78,11 +78,11 @@ resource "aws_security_group" "sg" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = "[0.0.0.0/0]"
+  cidr_blocks = ["0.0.0.0/0"]
   }
 
   # egress defines the kind of outbound-traffic allowed to leave the resources. such as 
-  egress = {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
